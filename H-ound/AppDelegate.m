@@ -37,12 +37,7 @@
     
     NSString *path = [[NSBundle mainBundle] pathForResource:
                       @"parseData" ofType:@"plist"];
-    
-    NSLog(@"Path %@", [path description]);
-    
     NSMutableDictionary *parseData = [[NSMutableDictionary alloc]initWithContentsOfFile:path];
-    
-    NSLog(@"%@", [parseData description]);
     
     //Parse Initialization
     [Parse setApplicationId:[parseData objectForKey:@"applicationId"]
