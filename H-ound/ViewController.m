@@ -19,7 +19,10 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    
+    if ([PFUser currentUser]) {
+        NSLog(@"[Login View Controller] Welcome back %@", [[PFUser currentUser] objectForKey:@"name"]);
+        [self performSegueWithIdentifier:@"loginComplete" sender:self];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -34,7 +37,7 @@
 }
 
 - (IBAction)facebookLoginButton {
-    NSArray *permissionsArray = @[ @"user_about_me", @"user_relationships", @"user_birthday", @"user_location"];
+    NSArray *permissionsArray = @[ @"user_about_me", @"user_location"];
     
     [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
         //NSLog(@"%@", [user description]);
@@ -55,34 +58,38 @@
             
             [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
                 if (!error) {
-                    NSString *name = [result objectForKey:@"first_name"];
-                    NSString *surname = [result objectForKey:@"last_name"];
-                    NSString *email = [result objectForKey:@"email"];
-                    NSString *link = [result objectForKey:@"link"];
-
-                    user[@"name"] = name;
-                    user[@"surname"] = surname;
-                    user.email = email;
+                    //Saving data
+                    user[@"facebookId"] = [result objectForKey:@"id"];
+                    user[@"name"] = [result objectForKey:@"first_name"];
+                    user[@"surname"] = [result objectForKey:@"last_name"];
+                    user.email = [result objectForKey:@"email"];
                     [user saveInBackground];
                     
-                    NSLog(@"Signin: %@ %@ %@ %@", name, surname, email, link);
-                    
+                    NSLog(@"Signup user description: %@", [user description]);
+
+                    //Parse.com channels cannot start with a number
                     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
                     currentInstallation[@"user"] = user;
-                    [currentInstallation setObject:[NSNumber numberWithBool:YES] forKey:@"canReceiveNotification"];
-                    [currentInstallation addUniqueObject:user[@"username"] forKey:@"channels"];
-                    [currentInstallation saveInBackground];
-                    
-                    [self performSegueWithIdentifier:@"loginComplete" sender:self];
+                    NSString *channelUser = [@"ch" stringByAppendingString:user[@"username"]];
+                    [currentInstallation addUniqueObject:channelUser forKey:@"channels"];
+                    [currentInstallation addUniqueObject:@"all" forKey:@"channels"];
+                    [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        if (succeeded) {
+                            [self performSegueWithIdentifier:@"loginComplete" sender:self];
+                        }
+                        else
+                        {
+                            NSLog(@"Error while saving installations: err %@, %@", [error localizedDescription], [error localizedFailureReason]);
+                        }
+
+                    }];
                 }
             }];
         }
         else
         {
             NSLog(@"[Login View Controller] Welcome back %@", user[@"name"]);
-            // GOTO personal (Skip walkthrough)
             [self performSegueWithIdentifier:@"loginComplete" sender:self];
-            
         }
     }];
 }

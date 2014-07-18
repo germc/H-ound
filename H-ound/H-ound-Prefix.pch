@@ -14,4 +14,6 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
     #import <Parse/Parse.h>
+    #import <UIColor+FlatColors/UIColor+FlatColors.h>
+
 #endif

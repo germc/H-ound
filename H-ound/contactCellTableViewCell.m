@@ -7,6 +7,7 @@
 //
 
 #import "contactCellTableViewCell.h"
+#import <POP/POP.h>
 
 @implementation contactCellTableViewCell
 
@@ -24,11 +25,78 @@
     // Initialization code
 }
 
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
+{
+    if (highlighted) {
+        [super setHighlighted:highlighted animated:animated];
+        
+        POPSpringAnimation *springAnimation = [POPSpringAnimation animation];
+        springAnimation.delegate = self;
+        springAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerScaleXY];
+        springAnimation.toValue = [NSValue valueWithCGSize:CGSizeMake(0.7, 0.7)];
+        springAnimation.name = @"tapAnimation";
+        springAnimation.springSpeed = 1;
+        springAnimation.springBounciness = 15;
+        
+        [self.layer pop_addAnimation:springAnimation forKey:@"tapDown"];
+    }
+    else
+    {
+        POPSpringAnimation *springAnimation = [POPSpringAnimation animation];
+        springAnimation.delegate = self;
+        springAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerScaleXY];
+        springAnimation.toValue = [NSValue valueWithCGSize:CGSizeMake(1, 1)];
+        springAnimation.name = @"selectedAnimation";
+        springAnimation.springSpeed = 3;
+        springAnimation.springBounciness = 10;
+        
+        [self.layer pop_addAnimation:springAnimation forKey:@"selected"];
+    }
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+
+    if (selected) {
+        POPSpringAnimation *springAnimation = [POPSpringAnimation animation];
+        springAnimation.delegate = self;
+        springAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerScaleXY];
+        springAnimation.toValue = [NSValue valueWithCGSize:CGSizeMake(1, 1)];
+        springAnimation.name = @"selectedAnimation";
+        springAnimation.springSpeed = 3;
+        springAnimation.springBounciness = 10;
+        
+        [self.layer pop_addAnimation:springAnimation forKey:@"selected"];
+
+    }
+    else
+    {
+        POPSpringAnimation *springAnimation = [POPSpringAnimation animation];
+        springAnimation.delegate = self;
+        springAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerScaleXY];
+        springAnimation.toValue = [NSValue valueWithCGSize:CGSizeMake(1, 1)];
+        springAnimation.name = @"unSelectedAnimation";
+        springAnimation.springSpeed = 3;
+        springAnimation.springBounciness = 10;
+        
+        [self.layer pop_addAnimation:springAnimation forKey:@"selected"];
+    }
 }
+
+/*
+POPSpringAnimation *springAnimation = [POPSpringAnimation animation];
+springAnimation.delegate=self;
+
+springAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerSize];
+springAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(300, 56)];
+springAnimation.name=@"firstAnimation";
+springAnimation.springBounciness = 12.f;
+springAnimation.springSpeed = 1.f;
+
+[ pop_addAnimation:springAnimation forKey:@"WhatEverNameYouWant"];
+*/
 
 @end

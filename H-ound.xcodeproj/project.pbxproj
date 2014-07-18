@@ -35,9 +35,9 @@
 		B917D2D1196E0F05008E418D /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B917D2D0196E0F05008E418D /* FacebookSDK.framework */; };
 		B917D2D3196E0F4E008E418D /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B917D2D2196E0F4E008E418D /* Accounts.framework */; };
 		B917D2D5196E0F5A008E418D /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B917D2D4196E0F5A008E418D /* Social.framework */; };
-		B917D2D8196E2168008E418D /* contactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B917D2D7196E2168008E418D /* contactsTableViewController.m */; };
 		B917D2DC196E7D43008E418D /* contactCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B917D2DB196E7D43008E418D /* contactCellTableViewCell.m */; };
 		B917D2E1196EE1D6008E418D /* userSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B917D2E0196EE1D6008E418D /* userSettingsViewController.m */; };
+		B954ADCD1978946700AB9877 /* contactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B954ADCC1978946700AB9877 /* contactsViewController.m */; };
 		B9B2F538196FEA2E00FC857D /* parseData.plist in Resources */ = {isa = PBXBuildFile; fileRef = B9B2F537196FEA2E00FC857D /* parseData.plist */; };
 /* End PBXBuildFile section */
 
@@ -85,12 +85,12 @@
 		B917D2D0196E0F05008E418D /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		B917D2D2196E0F4E008E418D /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		B917D2D4196E0F5A008E418D /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
-		B917D2D6196E2168008E418D /* contactsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = contactsTableViewController.h; sourceTree = "<group>"; };
-		B917D2D7196E2168008E418D /* contactsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = contactsTableViewController.m; sourceTree = "<group>"; };
 		B917D2DA196E7D43008E418D /* contactCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = contactCellTableViewCell.h; sourceTree = "<group>"; };
 		B917D2DB196E7D43008E418D /* contactCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = contactCellTableViewCell.m; sourceTree = "<group>"; };
 		B917D2DF196EE1D6008E418D /* userSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = userSettingsViewController.h; path = ../userSettingsViewController.h; sourceTree = "<group>"; };
 		B917D2E0196EE1D6008E418D /* userSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = userSettingsViewController.m; path = ../userSettingsViewController.m; sourceTree = "<group>"; };
+		B954ADCB1978946700AB9877 /* contactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = contactsViewController.h; sourceTree = "<group>"; };
+		B954ADCC1978946700AB9877 /* contactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = contactsViewController.m; sourceTree = "<group>"; };
 		B9B2F537196FEA2E00FC857D /* parseData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = parseData.plist; sourceTree = "<group>"; };
 		F14F84AC36DF49ADAA85E773 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -181,6 +181,7 @@
 		B917D28B196E0CDD008E418D /* H-ound */ = {
 			isa = PBXGroup;
 			children = (
+				B9DAA40219772B83006DD781 /* Location Manager */,
 				B917D294196E0CDD008E418D /* AppDelegate.h */,
 				B917D295196E0CDD008E418D /* AppDelegate.m */,
 				B917D297196E0CDD008E418D /* Main.storyboard */,
@@ -227,8 +228,8 @@
 		B917D2D9196E7D22008E418D /* Contacts View */ = {
 			isa = PBXGroup;
 			children = (
-				B917D2D6196E2168008E418D /* contactsTableViewController.h */,
-				B917D2D7196E2168008E418D /* contactsTableViewController.m */,
+				B954ADCB1978946700AB9877 /* contactsViewController.h */,
+				B954ADCC1978946700AB9877 /* contactsViewController.m */,
 				B917D2DA196E7D43008E418D /* contactCellTableViewCell.h */,
 				B917D2DB196E7D43008E418D /* contactCellTableViewCell.m */,
 			);
@@ -242,6 +243,13 @@
 				B917D2E0196EE1D6008E418D /* userSettingsViewController.m */,
 			);
 			name = "User Settings";
+			sourceTree = "<group>";
+		};
+		B9DAA40219772B83006DD781 /* Location Manager */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Location Manager";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -391,8 +399,8 @@
 				B917D2E1196EE1D6008E418D /* userSettingsViewController.m in Sources */,
 				B917D29C196E0CDD008E418D /* ViewController.m in Sources */,
 				B917D2DC196E7D43008E418D /* contactCellTableViewCell.m in Sources */,
+				B954ADCD1978946700AB9877 /* contactsViewController.m in Sources */,
 				B917D296196E0CDD008E418D /* AppDelegate.m in Sources */,
-				B917D2D8196E2168008E418D /* contactsTableViewController.m in Sources */,
 				B917D292196E0CDD008E418D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,7 +486,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "520D4BEA-F420-47D6-833D-0E93E11F3B58";
+				PROVISIONING_PROFILE = "9FC1316E-BA2D-47FE-B17D-D3087B3467A1";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -511,7 +519,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				PROVISIONING_PROFILE = "520D4BEA-F420-47D6-833D-0E93E11F3B58";
+				PROVISIONING_PROFILE = "9FC1316E-BA2D-47FE-B17D-D3087B3467A1";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -532,7 +540,7 @@
 				GCC_PREFIX_HEADER = "H-ound/H-ound-Prefix.pch";
 				INFOPLIST_FILE = "H-ound/H-ound-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "520D4BEA-F420-47D6-833D-0E93E11F3B58";
+				PROVISIONING_PROFILE = "9FC1316E-BA2D-47FE-B17D-D3087B3467A1";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -552,7 +560,7 @@
 				GCC_PREFIX_HEADER = "H-ound/H-ound-Prefix.pch";
 				INFOPLIST_FILE = "H-ound/H-ound-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "520D4BEA-F420-47D6-833D-0E93E11F3B58";
+				PROVISIONING_PROFILE = "9FC1316E-BA2D-47FE-B17D-D3087B3467A1";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -8,12 +8,17 @@
 
 #import "userSettingsViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <UIImage+BlurredFrame/UIImage+BlurredFrame.h>
+
+#import <NGAParallaxMotion/NGAParallaxMotion.h>
 
 @interface userSettingsViewController ()
 @property (strong, nonatomic) IBOutlet UISwitch *canReceiveNotifications;
 @property (strong, nonatomic) IBOutlet UIImageView *profilePicture;
+@property (strong, nonatomic) IBOutlet UIImageView *backgroundProfilePicture;
 @property (strong, nonatomic) IBOutlet UILabel *profileName;
 @property (strong, nonatomic) IBOutlet UILabel *profileSurname;
+@property (strong, nonatomic) IBOutlet UIView *nameBackgroundView;
 
 @end
 
@@ -44,9 +49,18 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    _profilePicture.layer.cornerRadius = 72.f;
+    _profilePicture.layer.cornerRadius = 40.f;
+    _profilePicture.layer.borderWidth = 3.f;
+    _profilePicture.layer.borderColor = [[UIColor flatAlizarinColor]CGColor];
     _profilePicture.layer.masksToBounds = YES;
+    
+    _nameBackgroundView.backgroundColor = [UIColor flatAlizarinColor];
+    _backgroundProfilePicture.contentMode = UIViewContentModeScaleAspectFill;
+    
+    _profilePicture.parallaxIntensity = 15.f;
+    _profileSurname.parallaxIntensity = 15.f;
+    _profileName.parallaxIntensity = 15.f;
+    _nameBackgroundView.parallaxIntensity = 15.f;
     
     _profileName.text = [[PFUser currentUser]objectForKey:@"name"];
     _profileSurname.text = [[PFUser currentUser]objectForKey:@"surname"];
@@ -58,9 +72,10 @@
              
              NSURL *profilePictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", facebookId]];
 
-             [self.profilePicture setImageWithURL:profilePictureURL
+             [self.profilePicture sd_setImageWithURL:profilePictureURL
                                placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
-             
+             [self.backgroundProfilePicture sd_setImageWithURL:profilePictureURL];
+             self.backgroundProfilePicture.image = [self.backgroundProfilePicture.image applyBlurWithRadius:20.f tintColor:[UIColor clearColor] saturationDeltaFactor:1.f maskImage:nil atFrame:CGRectMake(0, 0, self.backgroundProfilePicture.image.size.width, self.backgroundProfilePicture.image.size.height)];
          }
          else
          {
@@ -77,16 +92,6 @@
 }
 
 - (IBAction)toggleNotifications:(id)sender {
-    PFInstallation *installation = [PFInstallation currentInstallation];
-    if (_canReceiveNotifications.selected) {
-        [installation setObject:[NSNumber numberWithBool:NO] forKey:@"canReceiveNotification"];
-        [installation saveInBackground];
-    }
-    else
-    {
-        [installation setObject:[NSNumber numberWithBool:YES] forKey:@"canReceiveNotification"];
-        [installation saveInBackground];
-    }
 }
 
 /*

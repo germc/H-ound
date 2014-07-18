@@ -7,7 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#define HFARMBEACONREGION @"CEAA3E59-796E-4C0F-BE03-CC7FD2F2F532"
+#define HFARMBEACONREGION @"B70D40BA-A3B1-49BD-8671-6D47AE275F50"
+
 @import CoreLocation;
 
 @interface AppDelegate() <CLLocationManagerDelegate>
@@ -15,9 +16,6 @@
 //Regioni da monitorare
 @property (nonatomic, strong) NSMutableArray *allRegionsToMonitor;
 @property (nonatomic, strong) CLBeaconRegion *hfarmBeaconRegion;
-@property (nonatomic, strong) CLBeaconRegion *receptionBR;
-@property (nonatomic, strong) CLBeaconRegion *hcampBR;
-@property (nonatomic, strong) CLBeaconRegion *serraBR;
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSUUID *hfarmUUID;
@@ -53,37 +51,29 @@
 
     //LOCATION MANAGER PARTS
     _hfarmUUID = [[NSUUID alloc]initWithUUIDString:HFARMBEACONREGION];
+    self.locationManager = [[CLLocationManager alloc]init];
     _locationManager.delegate = self;
-
-    //Dictionary to switch
-    _zonesDictionary = @{@"com.hfarm.hfarmBeaconRegion": @0,
-                                      @"com.hfarm.reception": @1,
-                                      @"com.hfarm.hcamp": @2,
-                                      @"com.hfarm.serra": @3};
     
     // Generico ID di monitoring
-    _hfarmBeaconRegion = [[CLBeaconRegion alloc]initWithProximityUUID:_hfarmUUID identifier:@"com.hfarm.hfarmBeaconRegion"];
+    _hfarmBeaconRegion = [[CLBeaconRegion alloc]initWithProximityUUID:_hfarmUUID identifier:@"com.blueMate.H-ound"];
 
-    //Specific zones to identify
-    _receptionBR = [[CLBeaconRegion alloc]initWithProximityUUID:_hfarmUUID major:1 identifier:@"com.hfarm.reception"];
-    _hcampBR = [[CLBeaconRegion alloc]initWithProximityUUID:_hfarmUUID major:2 identifier:@"com.hfarm.hcamp"];
-    _serraBR = [[CLBeaconRegion alloc]initWithProximityUUID:_hfarmUUID major:3 identifier:@"com.hfarm.serra"];
+    [_locationManager startMonitoringForRegion:_hfarmBeaconRegion];
+
+    BOOL monitoringAvailable = [CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]];
     
-    //Add to array
-    [_allRegionsToMonitor addObject:_hfarmBeaconRegion];
-    [_allRegionsToMonitor addObject:_receptionBR];
-    [_allRegionsToMonitor addObject:_hcampBR];
-    [_allRegionsToMonitor addObject:_serraBR];
-
-    if ([PFUser currentUser]) {
-        //Up to 20 locations to search
-        int i = 0;
-        for (i=0; i < [_allRegionsToMonitor count]; i++) {
-            [_locationManager startMonitoringForRegion:_allRegionsToMonitor[i]];
+    if (monitoringAvailable) {
+        NSLog(@"Monitoring Available");
+        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
+                [_locationManager startMonitoringForRegion:_hfarmBeaconRegion];
+        }
+        else
+        {
+            NSLog(@"Auth status: not available");
         }
     }
-    else{
-        //Register First!
+    else
+    {
+        NSLog(@"Monitoring not available");
     }
     
     //DONE!
@@ -125,42 +115,31 @@
     //Send notification to parse of exit
     //Tell parse that i'm entered the region => user has a major number
     if (_enteredTimes == 0) {
+
         //Show local notification
         _enteredTimes++;
         
-        UILocalNotification *notification = [[UILocalNotification alloc]init];
-        notification.soundName = UILocalNotificationDefaultSoundName;
+        NSLog(@"LocationManager entered in region %@", [region description]);
         
-        NSInteger switcher = (NSInteger)[_zonesDictionary objectForKey:[region identifier]];
-        
-        switch (switcher) {
-            case 0:
-                //I'm in zone 0
-                notification.alertBody = NSLocalizedString(@"Benvenuto in H-Farm", @"2nd?");
-                break;
-            case 1:
-                //I'm in zone 1
-                notification.alertBody = NSLocalizedString(@"Benvenuto in Reception!", @"2nd?");
-                break;
-            case 2:
-                //I'm in zone 2
-                notification.alertBody = NSLocalizedString(@"Benvenuto in HCamp!", @"2nd?");
-                break;
-            case 3:
-                //I'm in zone 3
-                notification.alertBody = NSLocalizedString(@"Benvenuto in Serra!", @"2nd?");
-                break;
-            default:
-                // I'm entered but i don't know where I am
-                notification.alertBody = NSLocalizedString(@"Benvenuto in H-Farm", @"2nd?");
-                break;
-        }
-        
-        //Mostra la notifica
-        [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-    }
-    
+        PFUser *user = [PFUser currentUser];
+        user[@"inside"] = [NSNumber numberWithBool:YES];
+        [user saveInBackground];
 
+        //Comunicate to all people watching
+        PFPush *userEnteredInZone = [[PFPush alloc]init];
+        [userEnteredInZone setChannels:@[@"all"]];
+        
+        [userEnteredInZone setData:@{@"t": @"l",
+                                     @"id": [PFUser currentUser].objectId,
+                                     @"title": [[PFUser currentUser]objectForKey:@"name"],
+                                     @"alert": @"WEI",
+                                     @"s": @"o"}];
+
+        //        [userEnteredInZone setData:@{@"title": [[PFUser currentUser]objectForKey:@"name"]}];
+        //[userEnteredInZone setMessage:@"Arrivato"];
+        
+        [userEnteredInZone sendPushInBackground];
+    }
 }
 
 -(void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
@@ -168,57 +147,83 @@
     //Send notification to parse of exit
     //Delete major number from user
     
+    PFUser *user = [PFUser currentUser];
+    user[@"inside"] = [NSNumber numberWithBool:NO];
+    [user saveInBackground];
+    
     UILocalNotification *goodbyeNotification = [[UILocalNotification alloc]init];
-    goodbyeNotification.alertBody = NSLocalizedString(@"Arrivederci e grazie della visita", @"");
+    goodbyeNotification.alertBody = [NSString stringWithFormat:@"Arrivederci %@ e grazie della visita", [user objectForKey:@"name"]];
     goodbyeNotification.soundName = UILocalNotificationDefaultSoundName;
     
     [[UIApplication sharedApplication] presentLocalNotificationNow:goodbyeNotification];
 }
 
+-(void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region
+{
+    NSLog(@"Starting monitoring for region %@", [region identifier]);
+    [_locationManager startRangingBeaconsInRegion:_hfarmBeaconRegion];
+}
+
+-(void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
+{
+    NSString *stringState = [[NSString alloc]init];
+
+    switch (state) {
+        case 0:
+            stringState = @"Unknown";
+            break;
+        case 1:
+            stringState = @"Inside";
+            break;
+        case 2:
+            stringState = @"Outside";
+            break;
+        default:
+            stringState = @"default case";
+            break;
+    }
+    NSLog(@"Determined state for region %@, as %@", [region identifier], stringState);
+}
 
 #pragma mark - Notifications delegates methods
 -(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     //Local Notification income
     NSLog(@"[AppDelegate] Local notification received");
-    
 }
-
-
-/*
- - (void)application:(UIApplication *)application
- didReceiveRemoteNotification:(NSDictionary *)userInfo
- fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
- // Create empty photo object
- NSString *photoId = [userInfo objectForKey:@"p"];
- PFObject *targetPhoto = [PFObject objectWithoutDataWithClassName:@"Photo"
- objectId:photoId];
- 
- // Fetch photo object
- [targetPhoto fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
- // Show photo view controller
- if (error) {
- handler(UIBackgroundFetchResultFailed);
- } else if ([PFUser currentUser]) {
- PhotoVC *viewController = [[PhotoVC alloc] initWithPhoto:object];
- [self.navController pushViewController:viewController animated:YES];
- handler(UIBackgroundFetchResultNewData);
- } else {
- handler(UIBackgroundModeNoData);
- }
- }];
- }
- */
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-//    NSString *username = [userInfo objectForKey:@"name"];
+    NSLog(@"AppDelegate did receive Remote Notification. %@", [userInfo description]);
+    if ([[userInfo objectForKey:@"t"] isEqualToString:@"l"]) {
+        NSString *username = [userInfo objectForKey:@"title"];
+        NSString *alertText = [userInfo objectForKey:@"alert"];
+        NSString *concatStrings = [username stringByAppendingString:@" in "];
+        NSString *concat2 = [concatStrings stringByAppendingString:alertText];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:username
+                                                       message:concat2
+                                                      delegate:self
+                                             cancelButtonTitle:@"O-WEI"
+                                             otherButtonTitles:nil, nil];
+        [alert show];
+        
 
-    /*
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:username message:@"WEI" delegate:self cancelButtonTitle:@"WEI" otherButtonTitles:nil, nil];
-    [alert show];*/
+    }
+    else
+    {
+        if ([[userInfo objectForKey:@"t"]isEqualToString:@"m"])
+        {
+            UIAlertView *messageNotification = [[UIAlertView alloc]initWithTitle:[userInfo objectForKey:@"title"]
+                                                                         message:[userInfo objectForKey:@"alert"]
+                                                                        delegate:self
+                                                               cancelButtonTitle:@"OK"
+                                                               otherButtonTitles:nil, nil];
+            [messageNotification show];
+        }
+    }
     //Fetch new data for presenting to the interface
-    [PFPush handlePush:userInfo];
+    
+//    [PFPush handlePush:userInfo];
 }
 
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
