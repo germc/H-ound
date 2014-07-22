@@ -38,6 +38,7 @@
 		B917D2DC196E7D43008E418D /* contactCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B917D2DB196E7D43008E418D /* contactCellTableViewCell.m */; };
 		B917D2E1196EE1D6008E418D /* userSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B917D2E0196EE1D6008E418D /* userSettingsViewController.m */; };
 		B954ADCD1978946700AB9877 /* contactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B954ADCC1978946700AB9877 /* contactsViewController.m */; };
+		B990A19E197DBB1600B276E9 /* feedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B990A19D197DBB1600B276E9 /* feedbackViewController.m */; };
 		B9B2F538196FEA2E00FC857D /* parseData.plist in Resources */ = {isa = PBXBuildFile; fileRef = B9B2F537196FEA2E00FC857D /* parseData.plist */; };
 /* End PBXBuildFile section */
 
@@ -91,6 +92,8 @@
 		B917D2E0196EE1D6008E418D /* userSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = userSettingsViewController.m; path = ../userSettingsViewController.m; sourceTree = "<group>"; };
 		B954ADCB1978946700AB9877 /* contactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = contactsViewController.h; sourceTree = "<group>"; };
 		B954ADCC1978946700AB9877 /* contactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = contactsViewController.m; sourceTree = "<group>"; };
+		B990A19C197DBB1600B276E9 /* feedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = feedbackViewController.h; sourceTree = "<group>"; };
+		B990A19D197DBB1600B276E9 /* feedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = feedbackViewController.m; sourceTree = "<group>"; };
 		B9B2F537196FEA2E00FC857D /* parseData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = parseData.plist; sourceTree = "<group>"; };
 		F14F84AC36DF49ADAA85E773 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -187,6 +190,7 @@
 				B917D297196E0CDD008E418D /* Main.storyboard */,
 				B917D2E2196EE1E2008E418D /* User Settings */,
 				B917D2D9196E7D22008E418D /* Contacts View */,
+				B990A19F197DBB1A00B276E9 /* Feedback */,
 				B917D29A196E0CDD008E418D /* ViewController.h */,
 				B917D29B196E0CDD008E418D /* ViewController.m */,
 				B917D29D196E0CDD008E418D /* Images.xcassets */,
@@ -243,6 +247,15 @@
 				B917D2E0196EE1D6008E418D /* userSettingsViewController.m */,
 			);
 			name = "User Settings";
+			sourceTree = "<group>";
+		};
+		B990A19F197DBB1A00B276E9 /* Feedback */ = {
+			isa = PBXGroup;
+			children = (
+				B990A19C197DBB1600B276E9 /* feedbackViewController.h */,
+				B990A19D197DBB1600B276E9 /* feedbackViewController.m */,
+			);
+			name = Feedback;
 			sourceTree = "<group>";
 		};
 		B9DAA40219772B83006DD781 /* Location Manager */ = {
@@ -401,6 +414,7 @@
 				B917D2DC196E7D43008E418D /* contactCellTableViewCell.m in Sources */,
 				B954ADCD1978946700AB9877 /* contactsViewController.m in Sources */,
 				B917D296196E0CDD008E418D /* AppDelegate.m in Sources */,
+				B990A19E197DBB1600B276E9 /* feedbackViewController.m in Sources */,
 				B917D292196E0CDD008E418D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

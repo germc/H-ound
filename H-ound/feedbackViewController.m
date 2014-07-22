@@ -29,6 +29,16 @@
     // Do any additional setup after loading the view.
 }
 
+- (IBAction)feedbackButton:(id)sender
+{
+    
+}
+
+- (IBAction)newsButton:(id)sender
+{
+    
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

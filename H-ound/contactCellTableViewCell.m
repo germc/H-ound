@@ -33,7 +33,7 @@
         POPSpringAnimation *springAnimation = [POPSpringAnimation animation];
         springAnimation.delegate = self;
         springAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerScaleXY];
-        springAnimation.toValue = [NSValue valueWithCGSize:CGSizeMake(0.7, 0.7)];
+        springAnimation.toValue = [NSValue valueWithCGSize:CGSizeMake(0.9, 0.9)];
         springAnimation.name = @"tapAnimation";
         springAnimation.springSpeed = 1;
         springAnimation.springBounciness = 15;
@@ -85,18 +85,5 @@
         [self.layer pop_addAnimation:springAnimation forKey:@"selected"];
     }
 }
-
-/*
-POPSpringAnimation *springAnimation = [POPSpringAnimation animation];
-springAnimation.delegate=self;
-
-springAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerSize];
-springAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(300, 56)];
-springAnimation.name=@"firstAnimation";
-springAnimation.springBounciness = 12.f;
-springAnimation.springSpeed = 1.f;
-
-[ pop_addAnimation:springAnimation forKey:@"WhatEverNameYouWant"];
-*/
 
 @end

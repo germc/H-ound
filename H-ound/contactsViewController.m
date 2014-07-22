@@ -26,7 +26,6 @@
     [super viewDidLoad];
 
     self.navigationController.navigationBarHidden = NO;
-    [[UINavigationBar appearance]setBarTintColor:[UIColor flatMidnightBlueColor]];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
@@ -37,6 +36,14 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    [self fetchUsers];
+}
+- (IBAction)refreshTableButton:(id)sender {
+    [self fetchUsers];
+}
+
+-(void)fetchUsers
+{
     PFQuery *searchAllContactsOfHfarm = [PFUser query];
     searchAllContactsOfHfarm.cachePolicy = kPFCachePolicyNetworkElseCache;
     //    [searchAllContactsOfHfarm whereKey:@"objectId" notEqualTo:[PFUser currentUser].objectId];
@@ -50,7 +57,6 @@
         {
             NSLog(@"Description: %@, Failure: %@", [error localizedDescription], [error localizedFailureReason]);
         }
-        
     }];
 }
 
@@ -60,7 +66,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
+#pragma mark - Table view delegates methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -173,6 +179,29 @@
      [push sendPushInBackground];
      */
     
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CATransform3D rotation;
+    rotation = CATransform3DMakeRotation((90.0*M_PI)/180, 0.0, 0.7, 0.4);
+    rotation.m34 = 1.0/ -600;
+    
+    //Defining Initial state
+    cell.layer.shadowColor = [[UIColor blackColor]CGColor];
+    cell.layer.shadowOffset = CGSizeMake(10, 10);
+    cell.alpha = 0;
+    cell.layer.transform = rotation;
+    cell.layer.anchorPoint = CGPointMake(0, 0.5);
+    
+    //Defining Final state
+    [UIView beginAnimations:@"rotation" context:NULL];
+    [UIView setAnimationDuration:0.8];
+    cell.layer.transform = CATransform3DIdentity;
+    cell.alpha = 1;
+    cell.layer.shadowOffset = CGSizeMake(0, 0);
+    
+    [UIView commitAnimations];
 }
 
 - (IBAction)requestInfoForUser:(id)sender {

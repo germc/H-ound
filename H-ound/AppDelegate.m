@@ -209,21 +209,20 @@
         
 
     }
-    else
+    else if ([[userInfo objectForKey:@"t"]isEqualToString:@"m"])
     {
-        if ([[userInfo objectForKey:@"t"]isEqualToString:@"m"])
-        {
-            UIAlertView *messageNotification = [[UIAlertView alloc]initWithTitle:[userInfo objectForKey:@"title"]
-                                                                         message:[userInfo objectForKey:@"alert"]
-                                                                        delegate:self
-                                                               cancelButtonTitle:@"OK"
-                                                               otherButtonTitles:nil, nil];
-            [messageNotification show];
-        }
+        UIAlertView *messageNotification = [[UIAlertView alloc]initWithTitle:[userInfo objectForKey:@"title"]
+                                                                     message:[userInfo objectForKey:@"alert"]
+                                                                    delegate:self
+                                                           cancelButtonTitle:@"OK"
+                                                           otherButtonTitles:nil, nil];
+        [messageNotification show];
     }
-    //Fetch new data for presenting to the interface
-    
-//    [PFPush handlePush:userInfo];
+    else if ([[userInfo objectForKey:@"t"]isEqualToString:@"a"])
+    {
+        //iOS 7 notification to communicate the entrance in area.
+        //Delegate shoud turn IN/OUT label in tableview on - off
+    }
 }
 
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
